@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>People and their animals</title>
+    <link th:href="@{/style.css}" rel="stylesheet" type="text/css">
+
+
+    <style>
+
+table {
+border-collapse: collapse;
+width: 100%;
+color: #588c7e;
+font-family: monospace;
+font-size: 25px;
+text-align: left;
+}
+th {
+background-color: #588c7e;
+color: white;
+}
+tr:nth-child(even) {background-color: #f2f2f2}
+</style>
+</head>
+<body>
+<div class="u1">
+
+
+    <div sec:authorize="hasAnyRole('ANONYMOUS')">
+        <form action="#" th:action="@{/login}">
+            <tr>
+                <td colspan = "2"><button class="przycisk" type ="submit">Log in</button></td>
+            </tr>
+        </form>
+    </div>
+
+
+    <div sec:authorize="hasAnyRole('USER', 'ADMIN')">
+        <form action="#" th:action="@{/logout}">
+            <tr>
+                <td colspan = "2"><button class="przycisk" type ="submit">Log out</button></td>
+            </tr>
+        </form>
+    </div>
+</div>
+</form>
+<div sec:authorize="hasAnyRole('USER', 'ADMIN')" class="welcome">
+    <h3 th:inline="text">user: [[${#httpServletRequest.remoteUser}]]</h3>
+</div>
+
+<div sec:authorize="hasAnyRole('ANONYMOUS')" class="welcome">
+    <h1>Welcome</h1>
+</div>
+
+<div align="center">
+    <h1>ADDRESSES</h1>
+
+    <a href = "/addAddress">Enter new address</a>
+
+
+
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>ADDRESS_ID</th>
+            <th>STREET</th>
+            <th>APT_NUMBER</th>
+            <th>CODE</th>
+            <th>CITY</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each = "ADDRESS : ${listAddress}">
+            <td th:text="${ADDRESS.ADDRESS_ID}">ADDRESS_ID</td>
+            <td th:text="${ADDRESS.STREET}">STREET</td>
+            <td th:text="${ADDRESS.APT_NUMBER}">APT_NUMBER</td>
+            <td th:text="${ADDRESS.CODE}">CODE</td>
+            <td th:text="${ADDRESS.CITY}">CITY</td>
+
+            <td>
+                <a th:href="@{'/editAddress/' + ${ADDRESS.ADDRESS_ID}}">Edit</a>
+                <a th:href="@{'/saveDeleteAddress/' + ${ADDRESS.ADDRESS_ID}}">Delete</a>
+            </td>
+
+        </tr>
+        </tbody>
+
+    </table>
+
+    <div align="center" class="przycisk3">
+    <form action="#" th:action="@{/backHomePage}">
+        <tr>
+            <td colspan = "2"><button type ="submit"><h4>Home Page</h4></button></td>
+        </tr>
+    </form>
+    </div>
+</div>
+</body>
+</html>
